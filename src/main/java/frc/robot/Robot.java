@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 /*^install vendor library when ctre does funny things: https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix-frc2022-latest.json
 if doesn't work, restart vs code
@@ -44,9 +45,9 @@ public class Robot extends TimedRobot {
   XboxController operator = new XboxController(1);
 
   //again, bad names; change once get function
-  TalonSRX talonA = new TalonSRX(RobotMap.MOTOR1ID);
-  TalonSRX talonB = new TalonSRX(RobotMap.MOTOR2ID);
-  TalonSRX talonC = new TalonSRX(RobotMap.MOTOR3ID);
+  TalonSRX sorting = new TalonSRX(RobotMap.MOTOR1ID);
+  TalonSRX indexer = new TalonSRX(RobotMap.MOTOR2ID);
+  TalonSRX shooter = new TalonSRX(RobotMap.MOTOR3ID);
   TalonSRX talonD = new TalonSRX(RobotMap.MOTOR4ID);
   TalonSRX talonE = new TalonSRX(RobotMap.MOTOR5ID);
 
@@ -80,7 +81,20 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {}
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    if(timer.get()<RobotMap.AUTOTIME1){
+      drive.arcadeDrive(RobotMap.AUTODRIVESPEED1, RobotMap.AUTODRIVESPEED1);
+    }
+    if(timer.get()<RobotMap.AUTOTIME2 && timer.get()>RobotMap.AUTOTIME1){
+      
+    }
+    if(timer.get()<RobotMap.AUTOTIME3 && timer.get()>RobotMap.AUTOTIME2){
+      
+    }
+    if(timer.get()>RobotMap.AUTOTIME3){
+
+    }
+  }
 
   @Override
   public void teleopInit() {}
@@ -156,6 +170,44 @@ public class Robot extends TimedRobot {
     }
    }
   }
+
+  public void indexerInd(){
+    if (operator.getRawButton(RobotMap.OPERATORINDEXER)){
+      indexer.set(mode , 0.6);
+    }
+   
+    if (!operator.getRawButton(RobotMap.OPERATORINDEXER)){
+      indexer.set(mode, 0.0);
+    }
+  }
+
+  public void sortingWheelInd(){
+    if (operator.getRawAxis(2)>0){
+      sorting.set(mode , operator.getRawAxis(2));
+    }
+    if (operator.getRawAxis(3)>0){
+      sorting.set(mode, -operator.getRawAxis(3));
+    }
+    if (operator.getRawAxis(2)==0 && operator.getRawAxis(3)==0){
+      sorting.set(mode, 0.0);
+    }
+  }
+
+  public void indexerSorting(){
+    if (driver.getRawAxis(RobotMap.DRIVERINDEXERSORTING)>0){
+      indexer.set(mode, driver.getRawAxis(RobotMap.DRIVERINDEXERSORTING));
+      sorting.set(mode, driver.getRawAxis(RobotMap.DRIVERINDEXERSORTING));
+    }
+    if (driver.getRawAxis(RobotMap.DRIVERINDEXERSORTING)==0){
+      indexer.set(mode, 0);
+      sorting.set(mode, 0);
+    }
+  }
+
+  public void shooter(){
+
+  }
+
 
   //gyro method
   public void turnTo(double targetAngle, double targetSpeed){
