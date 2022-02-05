@@ -1,20 +1,19 @@
 package frc.robot;
 
 public class RobotMap {
-    //can drive motors; CAN IDS ARE NOT FINAL, JUST FILLING IN SPOTS
+    //can drive motors; CAN IDS CORRECT
     public static final int R1CANID = 1;
     public static final int R2CANID = 2;
-    public static final int R3CANID = 3;
-    public static final int L1CANID = 4;
-    public static final int L2CANID = 5;
-    public static final int L3CANID = 6;
+    public static final int L1CANID = 3;
+    public static final int L2CANID = 4;
+    
 
-    //can doing things motors
-    public static final int MOTOR1ID = 7;
-    public static final int MOTOR2ID = 8;
-    public static final int MOTOR3ID = 9;
-    public static final int MOTOR4ID = 10;
-    public static final int MOTOR5ID = 11;
+    //can doing things motors, place holders
+    public static final int SORTINGID = 7;
+    public static final int INDEXID = 8;
+    public static final int SHOOTID = 9;
+    public static final int INTAKEID = 10;
+    public static final int DRINTAKEID = 11;
 
     //pwm ports
     public static final int BLINKINPORT = 1;
@@ -23,6 +22,17 @@ public class RobotMap {
     public static final double AUTOTIME1 = 1.0;
     public static final double AUTOTIME2 = 1.0;
     public static final double AUTOTIME3 = 1.0;
+    public static final double AUTODRIVESPEED1 = .5;
+    public static final double AUTODRIVETURN1 = 0.0;
+
+    //operator controls
+    public static final int OPERATORINDEXERBUTTON = 1;
+    public static final int SHOOTERBUTTON = 3;
+    public static final int DEPLOYRETRACTINTAKEAXIS = 3;
+    public static final int INTAKEBUTTON = 4;
+
+    //driver controls 
+    public static final int DRIVERINDEXERSORTINGBUTTON = 2;
     
 
     
