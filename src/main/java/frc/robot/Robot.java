@@ -4,8 +4,9 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 /*^install vendor library when ctre does funny things: https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix-frc2022-latest.json
 if doesn't work, restart vs code
 if again doesn't work, uninstall ctre library from vendors, then restart vs code
@@ -20,7 +21,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.Spark; 
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -31,13 +32,13 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 public class Robot extends TimedRobot {
   CANSparkMax l1 = new CANSparkMax(RobotMap.L1CANID, MotorType.kBrushless);
   CANSparkMax l2 = new CANSparkMax(RobotMap.L2CANID, MotorType.kBrushless);
-  CANSparkMax l3 = new CANSparkMax(RobotMap.L3CANID, MotorType.kBrushless);
+  //CANSparkMax l3 = new CANSparkMax(RobotMap.L3CANID, MotorType.kBrushless);
   CANSparkMax r1 = new CANSparkMax(RobotMap.R1CANID, MotorType.kBrushless);
   CANSparkMax r2 = new CANSparkMax(RobotMap.R2CANID, MotorType.kBrushless);
-  CANSparkMax r3 = new CANSparkMax(RobotMap.R3CANID, MotorType.kBrushless);
+  //CANSparkMax r3 = new CANSparkMax(RobotMap.R3CANID, MotorType.kBrushless);
 
-  MotorControllerGroup l = new MotorControllerGroup(l1, l2, l3);
-  MotorControllerGroup r = new MotorControllerGroup(r1, r2, r3);
+  MotorControllerGroup l = new MotorControllerGroup(l1, l2);
+  MotorControllerGroup r = new MotorControllerGroup(r1, r2);
 
   DifferentialDrive drive = new DifferentialDrive(l,r);
 
@@ -45,11 +46,13 @@ public class Robot extends TimedRobot {
   XboxController operator = new XboxController(1);
 
   //again, bad names; change once get function
-  TalonSRX sorting = new TalonSRX(RobotMap.MOTOR1ID);
-  TalonSRX indexer = new TalonSRX(RobotMap.MOTOR2ID);
-  TalonSRX shooter = new TalonSRX(RobotMap.MOTOR3ID);
-  TalonSRX talonD = new TalonSRX(RobotMap.MOTOR4ID);
-  TalonSRX talonE = new TalonSRX(RobotMap.MOTOR5ID);
+  TalonSRX sorting = new TalonSRX(RobotMap.SORTINGID);
+  TalonSRX indexer = new TalonSRX(RobotMap.INDEXID);
+  TalonSRX intake = new TalonSRX(RobotMap.INTAKEID);
+  TalonSRX drIntake = new TalonSRX(RobotMap.DRINTAKEID);
+  
+
+  TalonSRX shooter = new TalonSRX(RobotMap.SHOOTID);
 
   //leds
   Spark led = new Spark(RobotMap.BLINKINPORT);
@@ -72,7 +75,10 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   @Override
-  public void robotInit() {}
+  public void robotInit() {
+    gyro.calibrate();
+    gyro.reset();
+  }
 
   @Override
   public void robotPeriodic() {}
@@ -107,6 +113,13 @@ public class Robot extends TimedRobot {
       drive.arcadeDrive(driver.getRawAxis(2) * 0.8, -driver.getRawAxis(0) * 0.8);
     }*/
     speedButtons();
+    shooter();
+    indexerInd();
+    indexerSorting();
+    leds();
+    //^important
+    deployRetractIntake();
+    intake();
   }
 
   @Override
@@ -123,7 +136,23 @@ public class Robot extends TimedRobot {
 
   public void deployClimber(){}
 
-  public void intakeUptake(){}
+  public void intake(){
+    if(operator.getRawButton(RobotMap.INTAKEBUTTON)){
+      intake.set(ControlMode.PercentOutput, .8);
+    }
+    if(!operator.getRawButton(RobotMap.INTAKEBUTTON)){
+      intake.set(ControlMode.PercentOutput, 0);
+    }
+  }
+
+  public void deployRetractIntake(){
+    if(operator.getRawAxis(RobotMap.DEPLOYRETRACTINTAKEAXIS)>0){
+      drIntake.set(ControlMode.PercentOutput, operator.getRawAxis(RobotMap.DEPLOYRETRACTINTAKEAXIS));
+    }
+    if(operator.getRawAxis(RobotMap.DEPLOYRETRACTINTAKEAXIS)==0){
+      drIntake.set(ControlMode.PercentOutput, 0);
+    }
+  }
 
   public void leds(){
     if(driver.getPOV() == 0){
@@ -172,45 +201,51 @@ public class Robot extends TimedRobot {
   }
 
   public void indexerInd(){
-    if (operator.getRawButton(RobotMap.OPERATORINDEXER)){
-      indexer.set(mode , 0.6);
+    if (operator.getRawButton(RobotMap.OPERATORINDEXERBUTTON)){
+      indexer.set(ControlMode.PercentOutput, 0.6);
     }
    
-    if (!operator.getRawButton(RobotMap.OPERATORINDEXER)){
-      indexer.set(mode, 0.0);
+    if (!operator.getRawButton(RobotMap.OPERATORINDEXERBUTTON)){
+      indexer.set(ControlMode.PercentOutput, 0.0);
     }
   }
 
   public void sortingWheelInd(){
     if (operator.getRawAxis(2)>0){
-      sorting.set(mode , operator.getRawAxis(2));
+      sorting.set(ControlMode.PercentOutput , operator.getRawAxis(2));
     }
     if (operator.getRawAxis(3)>0){
-      sorting.set(mode, -operator.getRawAxis(3));
+      sorting.set(ControlMode.PercentOutput, -operator.getRawAxis(3));
     }
     if (operator.getRawAxis(2)==0 && operator.getRawAxis(3)==0){
-      sorting.set(mode, 0.0);
+      sorting.set(ControlMode.PercentOutput, 0.0);
     }
   }
 
   public void indexerSorting(){
-    if (driver.getRawAxis(RobotMap.DRIVERINDEXERSORTING)>0){
-      indexer.set(mode, driver.getRawAxis(RobotMap.DRIVERINDEXERSORTING));
-      sorting.set(mode, driver.getRawAxis(RobotMap.DRIVERINDEXERSORTING));
+    if (driver.getRawAxis(RobotMap.DRIVERINDEXERSORTINGBUTTON)>0){
+      indexer.set(ControlMode.PercentOutput, driver.getRawAxis(RobotMap.DRIVERINDEXERSORTINGBUTTON));
+      sorting.set(ControlMode.PercentOutput, driver.getRawAxis(RobotMap.DRIVERINDEXERSORTINGBUTTON));
     }
-    if (driver.getRawAxis(RobotMap.DRIVERINDEXERSORTING)==0){
-      indexer.set(mode, 0);
-      sorting.set(mode, 0);
+    if (driver.getRawAxis(RobotMap.DRIVERINDEXERSORTINGBUTTON)==0){
+      indexer.set(ControlMode.PercentOutput, 0);
+      sorting.set(ControlMode.PercentOutput, 0);
     }
   }
 
   public void shooter(){
-
+    if(operator.getRawButton(RobotMap.SHOOTERBUTTON)){
+      shooter.set(ControlMode.PercentOutput, 0.7);
+    }
+    if(!operator.getRawButton(RobotMap.SHOOTERBUTTON)){
+      shooter.set(ControlMode.PercentOutput, 0.0);
+    }
   }
 
 
   //gyro method
   public void turnTo(double targetAngle, double targetSpeed){
+    //angle = 0-2^16
     PID.setSetpoint(targetAngle);
   PID.setTolerance(3, 0.1);
   double turn = PID.calculate(gyro.getAngle());
