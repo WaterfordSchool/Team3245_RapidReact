@@ -34,8 +34,11 @@ public class RobotMap {
     //driver controls 
     public static final int DRIVERINDEXERSORTINGBUTTON = 2;
     
+    //pneumatics
+    public static final int SOLFORCHANNEL1 = 1;
+    public static final int SOLFORCHANNEL2 = 2;
 
-    
-
-    
+    //pneumatics controls
+    public static final int SOLFOROFFBUTTON = 5;
+    public static final int SOLFORONBUTTON = 2;    
 }

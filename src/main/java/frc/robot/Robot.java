@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.DoublePredicate;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -19,9 +21,14 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -67,8 +74,9 @@ public class Robot extends TimedRobot {
   double p = Math.pow(0.5, 9);
   PIDController PID = new PIDController(p, i, d);
 
-
-
+  //pneumatics
+  DoubleSolenoid solfor = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.SOLFORCHANNEL1, RobotMap.SOLFORCHANNEL2);
+  Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -255,5 +263,18 @@ public class Robot extends TimedRobot {
     drive.arcadeDrive(targetSpeed, turn);
   }
   } 
+
+  public void gearShifting(){
+    solfor.set(Value.kOff);
+    if(driver.getRawButton(RobotMap.SOLFORONBUTTON)){
+      solfor.set(Value.kForward);
+    } else if(driver.getRawButton(RobotMap.SOLFOROFFBUTTON)){
+      solfor.set(Value.kReverse);
+    }
+  }
+
+  public void startCompressor(){
+    compressor.enableDigital();
+  }
 }
 
