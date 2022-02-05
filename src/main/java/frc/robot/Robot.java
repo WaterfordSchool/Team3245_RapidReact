@@ -86,6 +86,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     gyro.calibrate();
     gyro.reset();
+    startCompressor();
   }
 
   @Override
@@ -128,6 +129,7 @@ public class Robot extends TimedRobot {
     //^important
     deployRetractIntake();
     intake();
+    gearShifting();
   }
 
   @Override
