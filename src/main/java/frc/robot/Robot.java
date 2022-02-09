@@ -58,8 +58,10 @@ public class Robot extends TimedRobot {
   TalonSRX intake = new TalonSRX(RobotMap.INTAKEID);
   TalonSRX drIntake = new TalonSRX(RobotMap.DRINTAKEID);
   
-
-  TalonSRX shooter = new TalonSRX(RobotMap.SHOOTID);
+  //S shooter
+  TalonSRX fullSpeedShooter = new TalonSRX(RobotMap.SHOOTID);
+  TalonSRX intakeWheel = new TalonSRX(RobotMap.INTAKEID);
+  TalonSRX indexerWheel = new TalonSRX(RobotMap.INDEXID);
 
   //leds
   Spark led = new Spark(RobotMap.BLINKINPORT);
@@ -277,6 +279,21 @@ public class Robot extends TimedRobot {
 
   public void startCompressor(){
     compressor.enableDigital();
+  }
+
+  public void s_shooter(){
+    if(operator.getRawButton(RobotMap.INTAKEBUTTON)){
+      intake.set(ControlMode.PercentOutput, 0.5);
+      indexer.set(ControlMode.PercentOutput, -0.1);
+    }
+
+    if(operator.getRawButton(RobotMap.SHOOTERBUTTON)){
+      fullSpeedShooter.set(ControlMode.PercentOutput, 1);
+    }
+
+    if(operator.getRawButton(RobotMap.OPERATORINDEXERBUTTON)){
+      indexer.set(ControlMode.PercentOutput, 0.1);
+    }
   }
 }
 
