@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -57,7 +56,6 @@ public class Robot extends TimedRobot {
   TalonSRX indexer = new TalonSRX(RobotMap.INDEXID);
   TalonSRX intake = new TalonSRX(RobotMap.INTAKEID);
   TalonSRX drIntake = new TalonSRX(RobotMap.DRINTAKEID);
-  
 
   TalonSRX shooter = new TalonSRX(RobotMap.SHOOTID);
 
@@ -210,17 +208,19 @@ public class Robot extends TimedRobot {
    }
   }
 
-  public void indexerInd(){
+  public void sorting(){
     if (operator.getRawButton(RobotMap.OPERATORINDEXERBUTTON)){
-      indexer.set(ControlMode.PercentOutput, 0.6);
+      indexer.set(ControlMode.PercentOutput, -0.1);
+      sorting.set(ControlMode.PercentOutput, 0.5);
     }
    
     if (!operator.getRawButton(RobotMap.OPERATORINDEXERBUTTON)){
       indexer.set(ControlMode.PercentOutput, 0.0);
+      sorting.set(ControlMode.PercentOutput, 0.0);
     }
   }
 
-  public void sortingWheelInd(){
+  public void index(){
     if (operator.getRawAxis(2)>0){
       sorting.set(ControlMode.PercentOutput , operator.getRawAxis(2));
     }
