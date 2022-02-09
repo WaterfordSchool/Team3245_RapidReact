@@ -10,9 +10,6 @@ public class RobotMap {
 
     //can doing things motors, place holders
     public static final int SORTINGID = 7;
-    public static final int INDEXID = 8;
-    public static final int SHOOTID = 9;
-    public static final int INTAKEID = 10;
     public static final int DRINTAKEID = 11;
 
     //pwm ports
@@ -40,5 +37,10 @@ public class RobotMap {
 
     //pneumatics controls
     public static final int SOLFOROFFBUTTON = 5;
-    public static final int SOLFORONBUTTON = 2;    
+    public static final int SOLFORONBUTTON = 2;
+    
+    //shooter motor controller IDs
+    public static final int INDEXID = 8;
+    public static final int SHOOTID = 9;
+    public static final int INTAKEID = 10;
 }

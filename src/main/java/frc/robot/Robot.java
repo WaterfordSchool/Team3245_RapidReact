@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.DoublePredicate;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -57,7 +56,10 @@ public class Robot extends TimedRobot {
   TalonSRX intake = new TalonSRX(RobotMap.INTAKEID);
   TalonSRX drIntake = new TalonSRX(RobotMap.DRINTAKEID);
 
-  TalonSRX shooter = new TalonSRX(RobotMap.SHOOTID);
+  
+  //S shooter
+  TalonSRX fullSpeedShooter = new TalonSRX(RobotMap.SHOOTID);
+  
 
   //leds
   Spark led = new Spark(RobotMap.BLINKINPORT);
@@ -120,9 +122,6 @@ public class Robot extends TimedRobot {
       drive.arcadeDrive(driver.getRawAxis(2) * 0.8, -driver.getRawAxis(0) * 0.8);
     }*/
     speedButtons();
-    shooter();
-    indexerInd();
-    indexerSorting();
     leds();
     //^important
     deployRetractIntake();
@@ -208,49 +207,6 @@ public class Robot extends TimedRobot {
    }
   }
 
-  public void sorting(){
-    if (operator.getRawButton(RobotMap.OPERATORINDEXERBUTTON)){
-      indexer.set(ControlMode.PercentOutput, -0.1);
-      sorting.set(ControlMode.PercentOutput, 0.5);
-    }
-   
-    if (!operator.getRawButton(RobotMap.OPERATORINDEXERBUTTON)){
-      indexer.set(ControlMode.PercentOutput, 0.0);
-      sorting.set(ControlMode.PercentOutput, 0.0);
-    }
-  }
-
-  public void index(){
-    if (operator.getRawAxis(2)>0){
-      sorting.set(ControlMode.PercentOutput , operator.getRawAxis(2));
-    }
-    if (operator.getRawAxis(3)>0){
-      sorting.set(ControlMode.PercentOutput, -operator.getRawAxis(3));
-    }
-    if (operator.getRawAxis(2)==0 && operator.getRawAxis(3)==0){
-      sorting.set(ControlMode.PercentOutput, 0.0);
-    }
-  }
-
-  public void indexerSorting(){
-    if (driver.getRawAxis(RobotMap.DRIVERINDEXERSORTINGBUTTON)>0){
-      indexer.set(ControlMode.PercentOutput, driver.getRawAxis(RobotMap.DRIVERINDEXERSORTINGBUTTON));
-      sorting.set(ControlMode.PercentOutput, driver.getRawAxis(RobotMap.DRIVERINDEXERSORTINGBUTTON));
-    }
-    if (driver.getRawAxis(RobotMap.DRIVERINDEXERSORTINGBUTTON)==0){
-      indexer.set(ControlMode.PercentOutput, 0);
-      sorting.set(ControlMode.PercentOutput, 0);
-    }
-  }
-
-  public void shooter(){
-    if(operator.getRawButton(RobotMap.SHOOTERBUTTON)){
-      shooter.set(ControlMode.PercentOutput, 0.7);
-    }
-    if(!operator.getRawButton(RobotMap.SHOOTERBUTTON)){
-      shooter.set(ControlMode.PercentOutput, 0.0);
-    }
-  }
 
 
   //gyro method
@@ -277,6 +233,27 @@ public class Robot extends TimedRobot {
 
   public void startCompressor(){
     compressor.enableDigital();
+  }
+
+  public void s_shooter(){
+    if(operator.getRawButton(RobotMap.INTAKEBUTTON)){
+      sorting.set(ControlMode.PercentOutput, 0.5);
+      indexer.set(ControlMode.PercentOutput, -0.1);
+    }
+
+    if(operator.getRawButton(RobotMap.SHOOTERBUTTON)){
+      fullSpeedShooter.set(ControlMode.PercentOutput, 1);
+    }
+
+    if(operator.getRawButton(RobotMap.OPERATORINDEXERBUTTON)){
+      indexer.set(ControlMode.PercentOutput, 0.1);
+    }
+    if(!operator.getRawButton(RobotMap.INTAKEBUTTON) && !operator.getRawButton(RobotMap.SHOOTERBUTTON) && !operator.getRawButton(RobotMap.OPERATORINDEXERBUTTON)){
+      sorting.set(ControlMode.PercentOutput, 0.0);
+      indexer.set(ControlMode.PercentOutput, 0.0);
+      fullSpeedShooter.set(ControlMode.PercentOutput, 0.0);
+
+    }
   }
 }
 
