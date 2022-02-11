@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
   //auto 
   Timer timer = new Timer();
 
-  //gryo
+  //gyro
   ADXRS450_Gyro gyro = new ADXRS450_Gyro();
   double i = 0;
   double d = 0;
@@ -96,6 +96,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {}
 
   @Override
+  // what is this vscode theme
   public void autonomousPeriodic() {
     if(timer.get()<RobotMap.AUTOTIME1){
       drive.arcadeDrive(RobotMap.AUTODRIVESPEED1, RobotMap.AUTODRIVESPEED1);
