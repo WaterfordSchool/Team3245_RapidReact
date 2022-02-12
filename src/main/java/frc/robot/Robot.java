@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
 
   
   //S shooter
-  TalonSRX fullSpeedShooter = new TalonSRX(RobotMap.SHOOTID);
+  CANSparkMax fullSpeedShooter = new CANSparkMax(RobotMap.SHOOTID, MotorType.kBrushless);
   
 
   //leds
@@ -154,11 +154,14 @@ public class Robot extends TimedRobot {
   }
 
   public void deployRetractIntake(){
-    if(operator.getRawAxis(RobotMap.DEPLOYRETRACTINTAKEAXIS)>0){
-      drIntake.set(ControlMode.PercentOutput, operator.getRawAxis(RobotMap.DEPLOYRETRACTINTAKEAXIS));
+    if(operator.getRawAxis(RobotMap.DEPLOYINTAKEAXIS)>0){
+      drIntake.set(ControlMode.PercentOutput, operator.getRawAxis(RobotMap.DEPLOYINTAKEAXIS));
     }
-    if(operator.getRawAxis(RobotMap.DEPLOYRETRACTINTAKEAXIS)==0){
+    if(operator.getRawAxis(RobotMap.DEPLOYINTAKEAXIS)==0){
       drIntake.set(ControlMode.PercentOutput, 0);
+    }
+    if(operator.getRawAxis(RobotMap.RETRACTINTAKEAXIS)>0){
+      drIntake.set(ControlMode.PercentOutput, -operator.getRawAxis(RobotMap.RETRACTINTAKEAXIS));
     }
   }
 
@@ -208,8 +211,6 @@ public class Robot extends TimedRobot {
    }
   }
 
-
-
   //gyro method
   public void turnTo(double targetAngle, double targetSpeed){
     //angle = 0-2^16
@@ -243,18 +244,24 @@ public class Robot extends TimedRobot {
     }
 
     if(operator.getRawButton(RobotMap.SHOOTERBUTTON)){
-      fullSpeedShooter.set(ControlMode.PercentOutput, 1);
+      fullSpeedShooter.set(1);
     }
 
     if(operator.getRawButton(RobotMap.OPERATORINDEXERBUTTON)){
       indexer.set(ControlMode.PercentOutput, 0.1);
     }
+
     if(!operator.getRawButton(RobotMap.INTAKEBUTTON) && !operator.getRawButton(RobotMap.SHOOTERBUTTON) && !operator.getRawButton(RobotMap.OPERATORINDEXERBUTTON)){
       sorting.set(ControlMode.PercentOutput, 0.0);
       indexer.set(ControlMode.PercentOutput, 0.0);
-      fullSpeedShooter.set(ControlMode.PercentOutput, 0.0);
-
+      fullSpeedShooter.set(0.0);
     }
+  }
+
+  public void reverse_intake(){}
+
+  public void henryGyroTest(){
+    
   }
 }
 
