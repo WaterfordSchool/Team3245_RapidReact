@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 if doesn't work, restart vs code
 if again doesn't work, uninstall ctre library from vendors, then restart vs code
 if again doesn't work, panic*/
+//rev library link: https://software-metadata.revrobotics.com/REVLib.json
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -185,30 +186,31 @@ public class Robot extends TimedRobot {
   }
 
   public void speedButtons(){
+    //verified; WORK
     //slow button for xbox controller
-    if(driver.getRawButton(3)){
-      drive.arcadeDrive(-driver.getRawAxis(3) * 0.2, -driver.getRawAxis(0) * 0.2);
-      if(driver.getRawAxis(2) > 0){
-      drive.arcadeDrive(driver.getRawAxis(2) * 0.2, -driver.getRawAxis(0) * 0.2);
-    }
-   }
-
-   //fast button for xbox controller
-   else if(driver.getRawButton(1)){
-    drive.arcadeDrive(-driver.getRawAxis(3), -driver.getRawAxis(0));
-      if(driver.getRawAxis(2) > 0){
-        drive.arcadeDrive(driver.getRawAxis(2), -driver.getRawAxis(0));
-    }
-   }
-   
-
-   //default condition for neither buttons active
-   else if(!driver.getRawButton(3) || !driver.getRawButton(1)){
-    drive.arcadeDrive(-driver.getRawAxis(3) * 0.8, -driver.getRawAxis(0) * 0.8);
+   if(driver.getRawButton(3)){
+    drive.arcadeDrive(-driver.getRawAxis(0) * 0.2, -driver.getRawAxis(3) * 0.2);
     if(driver.getRawAxis(2) > 0){
-      drive.arcadeDrive(driver.getRawAxis(2) * 0.8, -driver.getRawAxis(0) * 0.8);
-    }
-   }
+    drive.arcadeDrive(-driver.getRawAxis(0) * 0.2, driver.getRawAxis(2) * 0.2);
+  }
+ }
+
+ //fast button for xbox controller
+ else if(driver.getRawButton(1)){
+  drive.arcadeDrive(-driver.getRawAxis(0), -driver.getRawAxis(3));
+    if(driver.getRawAxis(2) > 0){
+      drive.arcadeDrive(-driver.getRawAxis(0), driver.getRawAxis(2));
+  }
+ }
+ 
+
+ //default condition for neither buttons active
+ else if(!driver.getRawButton(3) || !driver.getRawButton(1)){
+  drive.arcadeDrive(-driver.getRawAxis(0) * 0.8, -driver.getRawAxis(3) * 0.8);
+  if(driver.getRawAxis(2) > 0){
+    drive.arcadeDrive(-driver.getRawAxis(0) * 0.8, driver.getRawAxis(2) * 0.8);
+  }
+ }
   }
 
   //gyro method
