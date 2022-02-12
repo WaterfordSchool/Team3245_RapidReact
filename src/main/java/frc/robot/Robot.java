@@ -196,7 +196,7 @@ public class Robot extends TimedRobot {
  }
 
  //fast button for xbox controller
- else if(driver.getRawButton(1)){
+ if(driver.getRawButton(1)){
   drive.arcadeDrive(-driver.getRawAxis(0), -driver.getRawAxis(3));
     if(driver.getRawAxis(2) > 0){
       drive.arcadeDrive(-driver.getRawAxis(0), driver.getRawAxis(2));
@@ -205,7 +205,7 @@ public class Robot extends TimedRobot {
  
 
  //default condition for neither buttons active
- else if(!driver.getRawButton(3) || !driver.getRawButton(1)){
+ if(!driver.getRawButton(3) || !driver.getRawButton(1)){
   drive.arcadeDrive(-driver.getRawAxis(0) * 0.8, -driver.getRawAxis(3) * 0.8);
   if(driver.getRawAxis(2) > 0){
     drive.arcadeDrive(-driver.getRawAxis(0) * 0.8, driver.getRawAxis(2) * 0.8);
