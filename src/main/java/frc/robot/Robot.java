@@ -210,7 +210,7 @@ public class Robot extends TimedRobot {
   if(driver.getRawAxis(2) > 0){
     drive.arcadeDrive(-driver.getRawAxis(0) * 0.8, driver.getRawAxis(2) * 0.8);
   }
- }
+ }  
   }
 
   //gyro method
@@ -241,7 +241,7 @@ public class Robot extends TimedRobot {
 
   public void s_shooter(){
     if(operator.getRawButton(RobotMap.INTAKEBUTTON)){
-      sorting.set(ControlMode.PercentOutput, 0.5);
+      sorting.set(ControlMode.PercentOutput, 0.1);
       indexer.set(ControlMode.PercentOutput, -0.1);
     }
 
@@ -267,3 +267,22 @@ public class Robot extends TimedRobot {
   }
 }
 
+// strong acids
+
+// perchloric acid hclo3
+// hydrochloric acid hcl
+// hydrobromic acid hbr
+// hydroiodic acid hi
+// nitric acid hno3
+// sulfuric acid h2so4
+
+// strong bases
+
+// lithium hydroxide lioh
+// sodium hydroxide naoh
+// calcium hydroxide caoh
+// barium hydroxide baoh
+// potassium hydroxide poh
+// strontium hydroxide sroh
+
+//reviewing chem rn 
