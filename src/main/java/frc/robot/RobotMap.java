@@ -12,6 +12,10 @@ public class RobotMap {
     public static final int SORTINGID = 7;
     public static final int DRINTAKEID = 11;
 
+    //climb motor ids: change ids once aquire
+    public static final int CLIMBAID = 99;
+    public static final int CLIMBBID = 100;
+
     //pwm ports
     public static final int BLINKINPORT = 1;
 
@@ -28,6 +32,7 @@ public class RobotMap {
     public static final int DEPLOYINTAKEAXIS = 3;
     public static final int RETRACTINTAKEAXIS = 4;
     public static final int INTAKEBUTTON = 4;
+    public static final int CLIMBERBUTTON = 5;
 
     //driver controls 
     public static final int DRIVERINDEXERSORTINGBUTTON = 2;

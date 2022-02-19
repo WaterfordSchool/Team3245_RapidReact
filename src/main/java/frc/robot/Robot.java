@@ -57,6 +57,10 @@ public class Robot extends TimedRobot {
   TalonSRX intake = new TalonSRX(RobotMap.INTAKEID);
   TalonSRX drIntake = new TalonSRX(RobotMap.DRINTAKEID);
 
+  //climb motors
+  TalonSRX climbA = new TalonSRX(RobotMap.CLIMBAID);
+  TalonSRX climbB = new TalonSRX(RobotMap.CLIMBBID);
+
   
   //S shooter
   CANSparkMax fullSpeedShooter = new CANSparkMax(RobotMap.SHOOTID, MotorType.kBrushless);
@@ -118,17 +122,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    //trigger drive taken from Infinite Recharge, commented out because may not be necessary (see speedButtons())
-    /*drive.arcadeDrive(-driver.getRawAxis(3) * 0.8, -driver.getRawAxis(0) * 0.8);
-    if(driver.getRawAxis(2) > 0){
-      drive.arcadeDrive(driver.getRawAxis(2) * 0.8, -driver.getRawAxis(0) * 0.8);
-    }*/
     speedButtons();
     leds();
     //^important
     deployRetractIntake();
     intake();
     gearShifting();
+    deployClimber();
   }
 
   @Override
@@ -143,7 +143,19 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
-  public void deployClimber(){}
+  public void deployClimber(){
+    if (timer.get()>=120){
+      if(operator.getRawButton(RobotMap.CLIMBERBUTTON)){
+        //change magnitude once test
+        climbA.set(ControlMode.PercentOutput, 0.4);
+        climbB.set(ControlMode.PercentOutput, 0.4);
+      }
+      if(!operator.getRawButton(RobotMap.CLIMBERBUTTON)){
+        climbA.set(ControlMode.PercentOutput, 0);
+        climbB.set(ControlMode.PercentOutput, 0);
+      }
+    }
+  }
 
   public void intake(){
     if(operator.getRawButton(RobotMap.INTAKEBUTTON)){
@@ -274,7 +286,7 @@ public class Robot extends TimedRobot {
 // hydrobromic acid hbr
 // hydroiodic acid hi
 // nitric acid hno3
-// sulfuric acid h2so4
+// sulfuric acid h2so4  
 
 // strong bases
 
@@ -286,3 +298,5 @@ public class Robot extends TimedRobot {
 // strontium hydroxide sroh
 
 //reviewing chem rn 
+/*good for you henry
+(henry doesn't know how to use comments)*/
