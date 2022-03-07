@@ -11,6 +11,7 @@ public class RobotMap {
     //can doing things motors, place holders
     public static final int SORTINGID = 7;
     public static final int DRINTAKEID = 11;
+    public static final int INTAKEID =0;
 
     //climb motor ids: change ids once aquire
     public static final int CLIMBAID = 99;
@@ -48,5 +49,5 @@ public class RobotMap {
     //shooter motor controller IDs
     public static final int INDEXID = 8;
     public static final int SHOOTID = 5;
-    public static final int INTAKEID = 10;
+    public static final int SHOOTINTAKEID = 10;
 }
