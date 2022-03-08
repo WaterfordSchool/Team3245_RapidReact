@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
   XboxController operator = new XboxController(1);
 
   //again, bad names; change once get function
-  TalonSRX sorting = new TalonSRX(RobotMap.SORTINGID);
+  TalonSRX shootIntake = new TalonSRX(RobotMap.SHOOTINTAKEID);
   TalonSRX indexer = new TalonSRX(RobotMap.INDEXID);
   TalonSRX intake = new TalonSRX(RobotMap.INTAKEID);
   TalonSRX drIntake = new TalonSRX(RobotMap.DRINTAKEID);
@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
 
   
   //S shooter
-  CANSparkMax fullSpeedShooter = new CANSparkMax(RobotMap.SHOOTID, MotorType.kBrushless);
+  CANSparkMax shooter = new CANSparkMax(RobotMap.SHOOTID, MotorType.kBrushless);
   
 
   //leds
@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
   // what is this vscode theme
   public void autonomousPeriodic() {
     if(timer.get()<RobotMap.AUTOTIME1){
-      drive.arcadeDrive(RobotMap.AUTODRIVESPEED1, RobotMap.AUTODRIVESPEED1);
+      drive.arcadeDrive(RobotMap.AUTODRIVESPEED1, RobotMap.AUTODRIVETURN1);
     }
     if(timer.get()<RobotMap.AUTOTIME2 && timer.get()>RobotMap.AUTOTIME1){
       
@@ -129,6 +129,9 @@ public class Robot extends TimedRobot {
     intake();
     gearShifting();
     deployClimber();
+    shootIntake();
+    indexer();
+    shoot();
   }
 
   @Override
@@ -142,6 +145,37 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {}
+
+  public void shootIntake(){
+    if(operator.getRawButton(1)){
+      shootIntake.set(ControlMode.PercentOutput, -0.5);
+
+    }
+    if(operator.getRawButton(4)){
+      shootIntake.set(ControlMode.PercentOutput, 0.5);
+
+    }
+    if(!operator.getRawButton(1) && !operator.getRawButton(4)){
+      shootIntake.set(ControlMode.PercentOutput, 0.0);
+    }
+  }
+  public void indexer(){
+    if(operator.getRawButton(2)){
+      indexer.set(ControlMode.PercentOutput, 0.5);
+
+    }
+    if(!operator.getRawButton(2)){
+      indexer.set(ControlMode.PercentOutput, 0.0);
+    }
+  }
+  public void shoot(){
+    if(operator.getRawButton(3)){
+      shooter.set(0.65);
+    }
+    if(!operator.getRawButton(3)){
+      shooter.set(0.0);
+    }
+  }
 
   public void deployClimber(){
     if (timer.get()>=120){
@@ -251,7 +285,7 @@ public class Robot extends TimedRobot {
     compressor.enableDigital();
   }
 
-  public void s_shooter(){
+  /*public void s_shooter(){
     if(operator.getRawButton(RobotMap.INTAKEBUTTON)){
       sorting.set(ControlMode.PercentOutput, 0.1);
       indexer.set(ControlMode.PercentOutput, -0.1);
@@ -270,7 +304,7 @@ public class Robot extends TimedRobot {
       indexer.set(ControlMode.PercentOutput, 0.0);
       fullSpeedShooter.set(0.0);
     }
-  }
+  }*/
 
   public void reverse_intake(){}
 
